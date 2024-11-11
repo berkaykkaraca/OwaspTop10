@@ -1,0 +1,29 @@
+1. Broken Access Control (Bozuk Erişim Kontrolü):
+Kullanıcı giriş yapmadan admin sayfasına yönlendirilebilir.
+
+
+2. Cryptographic Failures (Şifreleme Hatası):
+Sql Kullanıcı şifrelerini şifrelemeden saklıyor.
+
+3. Injection (Enjeksiyon):
+Student Girişi sırasında sql injection açığı var.
+
+4. Insecure Design (Güvenilir Tasarım):
+Student şifre yenileme ksımında kod gönderilmiyor direkt şifre değiştirilebiliyor.
+
+5. Security Misconfiguration
+debug = True olduğunda Student logindeki hatayı detaylı şekilde görebilmesi.
+
+6. Vulnerable and Outdated Components
+CKEditör
+
+7. Identification and Authentication Failures
+Student Zayıf parola girebiliyor.
+
+8. Software and Data Integrity Failures
+
+9. Security Logging and Monitoring Failures
+
+10. Server-Side Request Forgery (SSRF)
+
+

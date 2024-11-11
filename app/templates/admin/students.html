@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block body %}
+<h3>students</h3>
+{% if students %}
+<ul class="list-group">
+    
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">id</th>
+            <th scope="col">Username</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students %}
+          <tr>
+            <th scope="row">{{student.id}}</th>
+            <td><a href="/userdetail/{{student.id}}">{{student.username}}</a></td>
+            <td>{{student.name}}</td>
+            <td>{{student.email}}</td>
+            <td><a href="/admin/delete/student/{{student.username}}" class="btn btn-warning">Delete</a></td>
+          </tr>
+          
+          
+          {% endfor %}
+          
+        </tbody>
+      </table>    
+    
+  </ul>
+
+{% else %}
+<div class ="alert alert-danger" > Henüz Burada hiç makale bulunmuyor.</div>
+
+{% endif %}
+
+
+{% endblock body %}

@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% block body %}
+{% from "includes/formhelper.html" import render_field %}
+<h3>Giriş Yap</h3>
+<hr>
+<div class = "container">
+    <form method="Post">
+        {{ render_field(form.username) }}       
+        {{ render_field(form.password) }}
+      
+        <button type="submit" class="btn btn-primary">Giriş Yap</button><a style = "margin-left:25px;" href="/forgotpassword">Şifremi Unuttum</a>
+    </form>
+    
+</div>
+{% endblock body %}

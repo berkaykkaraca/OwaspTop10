@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+{% block body %}
+{% if question %}
+
+<a href="/answer/{{question.question_id}}" style = "margin-left:1000px;" class = "btn btn-danger"> Answer </a>
+
+<h3>{{question.title}}</h3> 
+<hr>
+<h6>by {{question.author}}</h6>
+<hr>
+<div class = "container" style="color:#EFC313;">
+
+    <h3>{{question.question|safe}}</h3>
+</div>
+{% if answers %}
+
+<div>
+{% for answer in answers %}
+<div class="m-auto pl-35 pr-15 text-left " style = "background:#345; border-radius:10px">
+    <div class = "font-26 font-weight-semibold" style="color:white; margin-left:20px; margin-top:20px;">
+
+        <p style = "color:orange"> {{answer.author}}</p>
+        
+    <h6>{{answer.answer}}</h6>
+    <hr>
+    </div>
+    
+    
+</div>
+
+{% endfor %}
+</div>
+{% else %}
+<div class = "alert alert-warning">
+Cevap yok</div>
+{% endif %}
+
+
+{% else %}
+<div class = "alert alert-warning">
+    This Question Does Not Exist...
+</div>
+
+{% endif %}
+
+
+
+
+{% endblock body %}
