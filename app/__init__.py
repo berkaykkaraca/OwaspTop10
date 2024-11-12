@@ -5,10 +5,10 @@ from config import Config
 app = Flask(__name__,)
 app.config.from_object(Config)
 app.secret_key = "bkk"
-app.config["MYSQL_HOST"] = "192.168.7.215"
+app.config["MYSQL_HOST"] = "127.0.0.1"
 app.config["MYSQL_USER"] = "Berkay"
 app.config["MYSQL_PASSWORD"] = "123Asd123"
-app.config["MYSQL_DB"] = "educationBlog"
+app.config["MYSQL_DB"] = "educationblog"
 app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 mysql = MySQL(app)
 
