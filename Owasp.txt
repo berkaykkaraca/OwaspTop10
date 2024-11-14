@@ -1,5 +1,6 @@
 1. Broken Access Control (Bozuk Erişim Kontrolü):
 Kullanıcı giriş yapmadan admin sayfasına yönlendirilebilir.
+Kullanıcı başkasının article'ını silebiliyor.
     # s = "SELECT * FROM articles WHERE author = %s and id = %s"
     # result = cursor.execute(s, [session["username"], id])
 
