@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import flash, redirect, url_for, session
 
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -9,7 +10,9 @@ def login_required(f):
         else:
             flash("Lütfen giriş yapınız...", "danger")
             return redirect(url_for("main.index"))
+
     return decorated_function
+
 
 def teacher_required(f):
     @wraps(f)
@@ -19,9 +22,11 @@ def teacher_required(f):
         else:
             flash("Please Login as a Teacher...", "danger")
             return redirect(url_for("main.index"))
+
     return decorated_function
 
-def admin(f):
+
+def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if session["type"] == "admin":
@@ -29,4 +34,5 @@ def admin(f):
         else:
             flash("Please Login as a Admin...", "danger")
             return redirect(url_for("main.index"))
+
     return decorated_function

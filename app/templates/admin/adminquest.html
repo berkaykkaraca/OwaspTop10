@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block body %}
+<h3>Users</h3>
+{% if questions %}
+<ul class="list-group">
+    
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">id</th>
+            
+           
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for q in questions %}
+          <tr>
+            <th scope="row">{{q.question_id}}</th>
+            <td><a href="/userdetail/{{q.question_id}}">{{q.question_id}}</a></td>
+           
+            <td><a href="/admin/delete/question/{{q.question_id}}" class="btn btn-warning">Delete</a></td>
+          </tr>
+          
+          
+          {% endfor %}
+
+         
+        </tbody>
+      </table>    
+    
+  </ul>
+
+{% else %}
+<div class ="alert alert-danger" > Henüz Burada hiç makale bulunmuyor.</div>
+
+{% endif %}
+
+
+{% endblock body %}

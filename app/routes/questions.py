@@ -3,7 +3,8 @@ from app import app, mysql
 from app.forms import QuestionForm, AnswerForm
 from app.decorators import login_required
 
-question_bp = Blueprint("question",__name__)
+question_bp = Blueprint("question", __name__)
+
 
 @question_bp.route("/askquestion", methods=["GET", "POST"])
 @login_required
@@ -22,6 +23,7 @@ def askQuestion():
         return redirect(url_for("question.questions"))
     return render_template("askquestion.html", form=form)
 
+
 @question_bp.route("/questions")
 def questions():
     cursor = mysql.connection.cursor()
@@ -32,6 +34,7 @@ def questions():
         return render_template("questions.html", questions=questions)
     else:
         return render_template("questions.html")
+
 
 @question_bp.route("/question/<string:id>")
 def question(id):
@@ -50,6 +53,7 @@ def question(id):
     else:
         return render_template("question.html")
 
+
 @question_bp.route("/answer/<string:id>", methods=["GET", "POST"])
 @login_required
 def answer(id):
@@ -59,7 +63,7 @@ def answer(id):
     result1 = cur2.execute(s, (id,))
     q = cur2.fetchone()
     if request.method == "POST" and form.validate():
-        author = session['username']
+        author = session["username"]
         answer = form.answer.data
         question_id = id
 
@@ -71,6 +75,7 @@ def answer(id):
         flash("Cevabınız başarıyla eklendi.", "info")
         return redirect(url_for("question.questions"))
     return render_template("answer.html", form=form, q=q)
+
 
 @question_bp.route("/searchquestion", methods=["GET", "POST"])
 def searchQuestion():

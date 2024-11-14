@@ -4,20 +4,25 @@ from functools import wraps
 from app.decorators import login_required
 
 
+main_bp = Blueprint("main", __name__)
 
-main_bp = Blueprint('main',__name__)
 
 @main_bp.route("/")
 def index():
     session["temp"] = None
+    if not "logged_in" in session:
+        session["type"] = ""
     return render_template("index.html")
+
 
 @main_bp.route("/logout")
 def logout():
     session["logged_in"] = False
     session["type"] = "None"
     session.clear()
+    flash("Successfully loged out.", "success")
     return redirect(url_for("main.index"))
+
 
 @main_bp.route("/<string:username>/settings/account")
 @login_required
@@ -28,9 +33,11 @@ def settings(username):
         flash("You can't access this page...", "danger")
         return redirect(url_for("main.index"))
 
+
 @main_bp.route("/about")
 def about():
     return render_template("about.html")
+
 
 @main_bp.route("/dashboard")
 @login_required

@@ -4,7 +4,8 @@ from app.forms import RegisterForm, LoginForm
 from app.decorators import login_required
 from passlib.hash import sha256_crypt
 
-teacher_bp = Blueprint('teacher', __name__)
+teacher_bp = Blueprint("teacher", __name__)
+
 
 @teacher_bp.route("/teacher/register", methods=["GET", "POST"])
 def teacherRegister():
@@ -28,6 +29,7 @@ def teacherRegister():
     else:
         return render_template("/teacher/register.html", form=form)
 
+
 @teacher_bp.route("/teacher/login", methods=["GET", "POST"])
 def teacherLogin():
     form = LoginForm(request.form)
@@ -44,7 +46,11 @@ def teacherLogin():
                 flash("Başarıyla giriş yaptınız...", "success")
                 session["logged_in"] = True
                 session["username"] = username
-                session["type"] = "teacher"
+
+                if username == "admin":
+                    session["type"] = "admin"
+                else:
+                    session["type"] = "teacher"
                 return redirect(url_for("main.index"))
             else:
                 flash("Parolanız yanlış", "danger")
@@ -52,4 +58,4 @@ def teacherLogin():
         else:
             flash("Böyle bir kullanıcı bulunmuyor...", "danger")
             return redirect(url_for("teacher.teacherLogin"))
-    return render_template('/teacher/login.html', form=form)
+    return render_template("/teacher/login.html", form=form)

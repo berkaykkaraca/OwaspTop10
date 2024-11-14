@@ -3,7 +3,8 @@ from app import app, mysql
 from app.forms import RegisterForm, LoginForm
 from app.decorators import login_required
 
-student_bp = Blueprint('student', __name__)
+student_bp = Blueprint("student", __name__)
+
 
 @student_bp.route("/student/register", methods=["GET", "POST"])
 def studentRegister():
@@ -13,7 +14,7 @@ def studentRegister():
         username = form.username.data
         email = form.email.data
         password = form.password.data
-        #password = sha256_crypt.encrypt(form.password.data)
+
         cursor = mysql.connection.cursor()
         try:
             s = "INSERT INTO student(name,username,email,password,type) VALUES(%s,%s,%s,%s,'student')"
@@ -28,6 +29,7 @@ def studentRegister():
     else:
         return render_template("/student/register.html", form=form)
 
+
 @student_bp.route("/student/login", methods=["GET", "POST"])
 def studentLogin():
     form = LoginForm(request.form)
@@ -36,8 +38,7 @@ def studentLogin():
         password = form.password.data
         cursor = mysql.connection.cursor()
         s = f"SELECT * FROM student WHERE username='{username}' AND password='{password}';"
-        #s= "SELECT * FROM student WHERE username='%s' AND password='%s';"
-        #result = cursor.execute(s,(username,password))
+
         result = cursor.execute(s)
         if result > 0:
             data = cursor.fetchone()
@@ -48,4 +49,4 @@ def studentLogin():
         else:
             flash("Böyle bir kullanıcı bulunmuyor...", "danger")
             return redirect(url_for("student.studentLogin"))
-    return render_template('/student/login.html', form=form)
+    return render_template("/student/login.html", form=form)

@@ -18,7 +18,7 @@
           {% for student in students %}
           <tr>
             <th scope="row">{{student.id}}</th>
-            <td><a href="/userdetail/{{student.id}}">{{student.username}}</a></td>
+            <td>{{student.username}}</td>
             <td>{{student.name}}</td>
             <td>{{student.email}}</td>
             <td><a href="/admin/delete/student/{{student.username}}" class="btn btn-warning">Delete</a></td>
@@ -30,7 +30,7 @@
           {% for teacher in teachers %}
           <tr>
             <th scope="row">{{teacher.id}}</th>
-            <td><a href="/userdetail/{{teacher.id}}">{{teacher.username}}</a></td>
+            <td>{{teacher.username}}</td>
             <td>{{teacher.name}}</td>
             <td>{{teacher.email}}</td>
             <td><a href="/admin/delete/teacher/{{teacher.username}}" class="btn btn-warning">Delete</a></td>

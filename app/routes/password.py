@@ -8,8 +8,12 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import sys
+import app.secret as secret
+
 global tempcode
-password_bp = Blueprint("password",__name__)
+password_bp = Blueprint("password", __name__)
+
+
 @password_bp.route("/forgotpassword", methods=["GET", "POST"])
 def forgotPassword():
     form = PasswordForm(request.form)
@@ -20,13 +24,15 @@ def forgotPassword():
         result = cur.execute(s, (email1,))
         if result > 0:
             email = cur.fetchone()
-            sendMail(email1)
-            return redirect(url_for("password.resetPassword", email=email1))
+            session["temp"] = email1
+            # sendMail(email1)
+            return redirect(url_for("password.changePassword", email=email1))
         else:
             flash("Wrong Email..", "danger")
             return redirect(url_for("password.forgotPassword"))
     else:
         return render_template("/student/forgotpassword.html", form=form)
+
 
 @password_bp.route("/resetpassword/<email>", methods=["GET", "POST"])
 def resetPassword(email):
@@ -37,7 +43,7 @@ def resetPassword(email):
         code = tempcode
         if str(submitted_code) == str(code):
             tempcode = 0
-            session["temp"]=email
+            session["temp"] = email
             return redirect(url_for("password.changePassword", email=email))
         else:
             flash("Kod yanlış", "danger")
@@ -45,31 +51,33 @@ def resetPassword(email):
     else:
         return render_template("/student/resetpassword.html", email=email, form=form)
 
+
 @password_bp.route("/changepassword/<email>", methods=["GET", "POST"])
 def changePassword(email):
     form = ChangePasswordForm(request.form)
-    if session["temp"]==email:
+    if session["temp"] == email:
         if request.method == "POST" and form.validate():
             cur = mysql.connection.cursor()
             password = sha256_crypt.encrypt(form.password.data)
             s = "UPDATE student SET password = %s WHERE email=%s"
             result = cur.execute(s, (password, email))
             mysql.connection.commit()
-            flash("Your password successfully changed")
-            session["temp"]=None
-            return redirect(url_for("password.studentLogin"))
+            flash("Your password successfully changed", "success")
+            session["temp"] = None
+            return redirect(url_for("student.studentLogin"))
         else:
             return render_template("/student/changepassword.html", form=form)
     else:
         flash("Buna yetkiniz yok!", "danger")
-        return redirect(url_for("password.studentLogin"))
+        return redirect(url_for("student.studentLogin"))
+
 
 @password_bp.route("/forgotpasswordteacher", methods=["GET", "POST"])
 def forgotPasswordTeacher():
     form = PasswordForm(request.form)
     if request.method == "POST":
         cur = mysql.connection.cursor()
-        s = "SELECT email FROM student WHERE email =%s"
+        s = "SELECT email FROM teacher WHERE email =%s"
         email1 = form.email.data
         result = cur.execute(s, (email1,))
         if result > 0:
@@ -82,6 +90,7 @@ def forgotPasswordTeacher():
     else:
         return render_template("/student/forgotpassword.html", form=form)
 
+
 @password_bp.route("/resetpasswordteacher/<email>", methods=["GET", "POST"])
 def resetPasswordTeacher(email):
     global tempcode
@@ -91,7 +100,7 @@ def resetPasswordTeacher(email):
         code = tempcode
         if str(submitted_code) == str(code):
             tempcode = 0
-            session["temp"]=email
+            session["temp"] = email
             return redirect(url_for("password.changePasswordTeacher", email=email))
         else:
             flash("Kod yanlış", "danger")
@@ -99,23 +108,25 @@ def resetPasswordTeacher(email):
     else:
         return render_template("/student/resetpassword.html", email=email, form=form)
 
+
 @password_bp.route("/changepasswordteacher/<email>", methods=["GET", "POST"])
 def changePasswordTeacher(email):
     form = ChangePasswordForm(request.form)
-    if session["temp"]==email:
+    if session["temp"] == email:
         if request.method == "POST" and form.validate():
             cur = mysql.connection.cursor()
             password = sha256_crypt.encrypt(form.password.data)
             s = "UPDATE teacher SET password = %s WHERE email=%s"
             result = cur.execute(s, (password, email))
             mysql.connection.commit()
-            flash("Your password successfully changed")
+            flash("Your password successfully changed", "success")
             return redirect(url_for("teacher.teacherLogin"))
         else:
             return render_template("/student/changepassword.html", form=form)
     else:
         flash("Buna yetkiniz yok!", "danger")
         return redirect(url_for("student.studentLogin"))
+
 
 def sendMail(email):
     global tempcode
@@ -132,10 +143,10 @@ def sendMail(email):
     g = MIMEText(yazi, "plain")
     message.attach(g)
     try:
-        mail = smtplib.SMTP('smtp.outlook.com', 587)
+        mail = smtplib.SMTP("smtp.outlook.com", 587)
         mail.ehlo()
         mail.starttls()
-        mail.login("berkay.karaca@tedu.edu.tr", "13Mart2012.")
+        mail.login("berkay.karaca@tedu.edu.tr", secret.password)
         mail.sendmail(message["From"], message["To"], message.as_string())
         print("Mail gönderildi..")
         mail.quit()

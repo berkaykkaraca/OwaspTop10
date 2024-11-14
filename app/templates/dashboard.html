@@ -6,8 +6,8 @@
 <hr>
 <a href="/addarticle" class = "btn btn-danger">Add Article</a>
 
-{% if session["type"] == "teacher" %}
-<a href="/createquiz" class = "btn btn-danger">Add Quiz</a>
+{% if session["type"] == "admin" %}
+<a href="/admin/users" class = "btn btn-danger">Users</a>
 {% endif %}
 <br><br>
 {% if articles %}

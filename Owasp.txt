@@ -1,12 +1,16 @@
 1. Broken Access Control (Bozuk Erişim Kontrolü):
 Kullanıcı giriş yapmadan admin sayfasına yönlendirilebilir.
-
+    # s = "SELECT * FROM articles WHERE author = %s and id = %s"
+    # result = cursor.execute(s, [session["username"], id])
 
 2. Cryptographic Failures (Şifreleme Hatası):
 Sql Kullanıcı şifrelerini şifrelemeden saklıyor.
+#password = sha256_crypt.encrypt(form.password.data)
 
 3. Injection (Enjeksiyon):
 Student Girişi sırasında sql injection açığı var.
+#s= "SELECT * FROM student WHERE username='%s' AND password='%s';"
+        #result = cursor.execute(s,(username,password))
 
 4. Insecure Design (Güvenilir Tasarım):
 Student şifre yenileme ksımında kod gönderilmiyor direkt şifre değiştirilebiliyor.
@@ -17,13 +21,24 @@ debug = True olduğunda Student logindeki hatayı detaylı şekilde görebilmesi
 6. Vulnerable and Outdated Components
 CKEditör
 
-7. Identification and Authentication Failures
+
+7. Identification and Authentication Failures (Tanımlama ve Kimlik Doğrulama Hataları)
 Student Zayıf parola girebiliyor.
 
+
+    password = PasswordField("Password:", validators=[
+        validators.length(min=7, max=35),
+        validators.EqualTo("confirm", message="Parolanız uyuşmuyor."),
+        validators.DataRequired(message="Lütfen bir şifre belirleyin.")
+
+
 8. Software and Data Integrity Failures
+__init__ dosyasında githubdan dosya çekiyor.
 
 9. Security Logging and Monitoring Failures
+Loglama Yapmıyor.
 
 10. Server-Side Request Forgery (SSRF)
+SS alma 
 
 

@@ -1,33 +1,14 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, session, request
 from app import app, mysql
-from app.decorators import login_required
+from app.decorators import login_required, admin_required
 
-admin_bp = Blueprint('admin',__name__)
+admin_bp = Blueprint("admin", __name__)
 
-@admin_bp.route("/admin/users/teachers")
-def teachers():
-    cursor = mysql.connection.cursor()
-    s = "SELECT * FROM student"
-    s2 = "SELECT * FROM teacher"
-    result2 = cursor.execute(s2)
-    teachers = cursor.fetchall()
-    result = cursor.execute(s)
-    students = cursor.fetchall()
-    return render_template("/admin/teachers.html", students=students, teachers=teachers)
-
-@admin_bp.route("/users/students")
-def students():
-    cursor = mysql.connection.cursor()
-    s = "SELECT * FROM student"
-    s2 = "SELECT * FROM teacher"
-    result = cursor.execute(s)
-    students = cursor.fetchall()
-    return render_template("/admin/students.html", students=students)
 
 @admin_bp.route("/admin/users")
 def admin():
     cursor = mysql.connection.cursor()
-    s2 = "SELECT * FROM teacher"
+    s2 = "SELECT * FROM teacher WHERE username != 'admin'"
     result2 = cursor.execute(s2)
     teachers = cursor.fetchall()
     s = "SELECT * FROM student"
@@ -35,6 +16,7 @@ def admin():
     students = cursor.fetchall()
     users = teachers + students
     return render_template("/admin/admin.html", students=students, teachers=teachers)
+
 
 @admin_bp.route("/admin/delete/teacher/<string:username>")
 def deleteTeacher(username):
@@ -53,10 +35,11 @@ def deleteTeacher(username):
             flash("Successfully Deleted Teacher", "success")
             return redirect(url_for("admin.admin"))
         mysql.connection.commit()
-        flash('Teacher object has been deleted.', 'success')
-        return redirect(url_for('admin.admin'))
+        flash("Teacher object has been deleted.", "success")
+        return redirect(url_for("admin.admin"))
     else:
         return redirect(url_for("admin.admin"))
+
 
 @admin_bp.route("/admin/delete/student/<string:username>")
 def deleteStudent(username):
@@ -75,7 +58,7 @@ def deleteStudent(username):
             flash("Successfully Deleted Student", "success")
             return redirect(url_for("admin.admin"))
         mysql.connection.commit()
-        flash('Student object has been deleted.', 'success')
-        return redirect(url_for('admin.admin'))
+        flash("Student object has been deleted.", "success")
+        return redirect(url_for("admin.admin"))
     else:
         return redirect(url_for("admin.admin"))
